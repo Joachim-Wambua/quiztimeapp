@@ -1,13 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quiztime_app/controllers/quiz/quiz_controller.dart';
+import 'package:quiztime_app/repositories/quiz/quiz_repository.dart';
 
+import 'controllers/quiz/quiz_state.dart';
 import 'loginscreen.dart';
 
-void main() => runApp(MaterialApp(
-      home: HomePage(),
-    ));
+
+
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    home: HomePage(),
+  ));
+}
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = GoogleSignIn();
+// final GoogleSignIn googleSignIn = GoogleSignIn();
 
 class _HomePageState extends State<HomePage> {
   Color primaryColor = Color(0xff18203d);
@@ -98,14 +109,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-_signInWithGoogle() async {
-  final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-  final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
-
-  final User user = (await firebaseAuth.signInWithCredential(credential)).user;
 }

@@ -26,10 +26,20 @@ dependencies:
   firebase_core: ^0.7.0
   firebase_database: ^6.0.0
   firebase_auth: # For Firebase Authentication
+  firebase_dynamic_links:
   google_sign_in: # For Google Sign In
   font_awesome_flutter: # For adding Font Awesome Google Icons
   google_fonts: # Adding Google Font TypeFaces to the app
+  provider:
 
+
+  dio: ^3.0.10
+  enum_to_string: ^1.0.14
+  equatable: ^1.2.6
+  flutter_hooks: ^0.15.0
+  hooks_riverpod: ^0.12.4
+  html_character_entities: ^0.1.2+4
+  meta: ^1.2.4
 
 
   # The following adds the Cupertino Icons font to your application.
