@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:quiztime_app/categories_page.dart';
-import 'package:quiztime_app/verify_email_Screen.dart';
+import 'package:quiztime_app/screens/sign_up.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
 
 // import 'main.dart';
-import 'authentication.dart';
+import '../authentication/authentication.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -22,12 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final Color secondaryColor = Color(0xff232c51);
   final Color logoColor = Color(0xff25bcbb);
 
-  String _email, _password;
-
+  String userEmail, userPassword;
   User user;
-  // Variables for Email Authentication
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +78,11 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 50,
             ),
-            _buildTextField(nameController, Icons.account_circle, 'Email'),
+            // Building the Email Text Field Input Area
+            _buildEmailField(),
             SizedBox(height: 20),
-            _buildTextField(passwordController, Icons.lock, 'Password'),
+            // Building the Passord Text Field Input Area
+            _buildPasswordField(),
             SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -93,10 +93,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(45)),
                 onPressed: () {
-                  authenticateUser.signInWithEmailAndPassword(email: _email, password: _password).then((_) {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => VerifyEmail()));
-                  });
+                  try {
+                    authenticateUser.signInWithEmailAndPassword(
+                        email: userEmail, password: userPassword);
+                    //   .then((_) {
+                    // Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(builder: (context) =>
+                    //         VerifyEmail()));
+                    // }
+                    // );
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found') {
+                      print('No user found with these Credentials!');
+                    } else if (e.code == 'wrong-password') {
+                      print('Wrong Password!');
+                    }
+                  }
                 },
                 color: Color(0xffEA7A15),
                 child: Text('Sign In with Email',
@@ -122,14 +134,46 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.google),
                     SizedBox(width: 10),
-                    Text('Sign-in with Google',
+                    Text('Sign In with Google',
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ],
                 ),
                 textColor: Colors.white,
               ),
             ),
-            SizedBox(height: 100),
+            // SizedBox(height: 100),
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'or',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                )),
+
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Text(
+                      'Create an Account',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    // Go To Sign Up Page
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SignUpScreen()));
+                  },
+                ))
           ],
         ),
       ),
@@ -149,27 +193,72 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Function to build the Text Fields for user input
-  _buildTextField(
-      TextEditingController controller, IconData icon, String labelText) {
+  _buildEmailField() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-            color: secondaryColor, border: Border.all(color: Colors.blue)),
+        color: Colors.white,
+        // decoration: BoxDecoration(
+        //     border: Border.all(
+        //       style: BorderStyle.solid,
+        //       color: Colors.white,
+        //     ),
+        // borderRadius: BorderRadius.all(Radius.circular(20))),
         child: TextField(
-          controller: controller,
-          style: TextStyle(color: Colors.white),
+          key: Key("emailField"),
+          // Limiting Input type to only Email Addresses
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              labelText: labelText,
-              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
-              icon: Icon(
-                icon,
-                color: Colors.white,
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            // Font Awesome Package Icons for Flutter
+            // Envelope for email
+            icon: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: FaIcon(
+                FontAwesomeIcons.envelope,
+                size: 18,
               ),
-              // prefix: Icon(icon),
-              border: InputBorder.none),
+            ),
+            hintText: 'Email',
+          ),
+          // Linking the Email variable created to our input value
+          onChanged: (value) {
+            setState(() {
+              userEmail = value.trim();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  _buildPasswordField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Container(
+        color: Colors.white,
+        child: TextField(
+          key: Key("passwordField"),
+          obscureText: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            // Font Awesome Package Icons for Flutter
+            // Key for password
+            icon: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: FaIcon(
+                FontAwesomeIcons.key,
+                size: 18,
+              ),
+            ),
+            hintText: 'Password',
+          ),
+          // Linking the Password variable created to our input value
+          onChanged: (value) {
+            setState(() {
+              userPassword = value.trim();
+            });
+          },
         ),
       ),
     );
@@ -179,6 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void click() {
     signInWithGoogle().then((user) => {
           this.user = user,
+          // Link to the Categories Page
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => CategoriesPage(user)))
         });

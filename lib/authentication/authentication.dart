@@ -12,7 +12,7 @@ Future<User> signInWithGoogle() async {
   // Vars to collect User information
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+      await googleSignInAccount.authentication; 
   final AuthCredential credential = GoogleAuthProvider.credential(
     idToken: googleSignInAuthentication.idToken, accessToken: googleSignInAuthentication.accessToken);
 

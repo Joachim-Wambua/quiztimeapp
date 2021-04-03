@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quiztime_app/authentication.dart';
-import 'package:quiztime_app/categories_page.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/authentication.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
 
 class VerifyEmail extends StatefulWidget {
   @override

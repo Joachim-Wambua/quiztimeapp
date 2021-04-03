@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quiztime_app/controllers/quiz/quiz_controller.dart';
 import 'package:quiztime_app/repositories/quiz/quiz_repository.dart';
+import 'package:quiztime_app/screens/sign_up.dart';
 
 import 'controllers/quiz/quiz_state.dart';
-import 'loginscreen.dart';
+import 'screens/loginscreen.dart';
 
 
 
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()));
+                      MaterialPageRoute(builder: (_) => SignUpScreen()));
                 },
                 color: Color(0xffEA7A15),
                 child: Row(
