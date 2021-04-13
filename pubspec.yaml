@@ -1,5 +1,5 @@
 name: quiztime_app
-description: A new Flutter application.
+description: A fun and informative Quiz Application.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -31,12 +31,11 @@ dependencies:
   font_awesome_flutter: # For adding Font Awesome Google Icons
   google_fonts: # Adding Google Font TypeFaces to the app
   provider:
-
-
   dio: ^3.0.10
   enum_to_string: ^1.0.14
   equatable: ^1.2.6
   flutter_hooks: ^0.15.0
+  fluttertoast: ^3.0.1
   hooks_riverpod: ^0.12.4
   html_character_entities: ^0.1.2+4
   meta: ^1.2.4
@@ -72,6 +71,7 @@ flutter:
      - images/quiztimelogo.png
      - images/science.png
      - images/sports.png
+     - images/music.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

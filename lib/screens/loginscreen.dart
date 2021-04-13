@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quiztime_app/mainpage.dart';
 import 'package:quiztime_app/screens/sign_up.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
@@ -95,13 +96,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   try {
                     authenticateUser.signInWithEmailAndPassword(
-                        email: userEmail, password: userPassword);
-                    //   .then((_) {
-                    // Navigator.of(context).pushReplacement(
-                    //     MaterialPageRoute(builder: (context) =>
-                    //         VerifyEmail()));
-                    // }
-                    // );
+                        email: userEmail, password: userPassword).then((_) {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) =>
+                            VerifyEmail()));
+                    }
+                    );
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       print('No user found with these Credentials!');
@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
           this.user = user,
           // Link to the Categories Page
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CategoriesPage(user)))
+              MaterialPageRoute(builder: (context) => GridLayout()))
         });
   }
 }

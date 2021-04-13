@@ -1,142 +1,26 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
-import 'package:quiztime_app/controllers/quiz/quiz_controller.dart';
-import 'package:quiztime_app/enums/difficulty.dart';
-import 'package:quiztime_app/models/failure_model.dart';
-import 'package:quiztime_app/models/question_model.dart';
-import 'package:quiztime_app/repositories/quiz/quiz_repository.dart';
-import 'package:quiztime_app/screens/sign_up.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
+import 'package:quiztime_app/mainpage.dart';
+
+import 'controllers/quiz/quiz_controller.dart';
 import 'controllers/quiz/quiz_state.dart';
-
-
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-        title: 'Quiz Time App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.yellow,
-          bottomSheetTheme:
-          const BottomSheetThemeData(backgroundColor: Colors.transparent),
-        ),
-        home: HomePage(),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-// final GoogleSignIn googleSignIn = GoogleSignIn();
-
-class _HomePageState extends State<HomePage> {
-  Color primaryColor = Color(0xff18203d);
-  Color secondaryColor = Color(0xff232c51);
-  Color logoColor = Color(0xff25bcbb);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff022140),
-        title: Text("Quiz Time"),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage("images/appbackground.png"),
-          fit: BoxFit.cover,
-        )),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            //We take the image from the assets
-            Image.asset(
-              'images/quiztimelogo.png',
-              height: 250,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            //Texts and Styling of them
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                'Welcome to QuizTime!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                'Test your wit, gain knowledge & impress your friends with QuizTime',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            //Our MaterialButton which when pressed will take us to a new screen named as
-            //LoginScreen
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: MaterialButton(
-                elevation: 0,
-                height: 50,
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => SignUpScreen()));
-                },
-                color: Color(0xffEA7A15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Get Started',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    Icon(Icons.arrow_forward_ios)
-                  ],
-                ),
-                textColor: Colors.white,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
+import 'enums/difficulty.dart';
+import 'models/failure_model.dart';
+import 'models/question_model.dart';
+import 'repositories/quiz/quiz_repository.dart';
 
 final quizQuestionsProvider = FutureProvider.autoDispose<List<Question>>(
-      (ref) => ref.watch(quizRepositoryProvider).getQuestions(
-    numQuestions: 5,
-    categoryId: Random().nextInt(24) + 9,
-    difficulty: Difficulty.any,
-  ),
+  (ref) => ref.watch(quizRepositoryProvider).getQuestions(
+        numQuestions: 5,
+        categoryId: Random().nextInt(24) + 9,
+        difficulty: Difficulty.any,
+      ),
 );
 
 class QuizScreen extends HookWidget {
@@ -149,7 +33,7 @@ class QuizScreen extends HookWidget {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFFD4418E), Color(0xFF0652C5)],
+          colors: [Colors.indigo, Colors.black],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -191,20 +75,20 @@ class QuizScreen extends HookWidget {
   }
 
   Widget _buildBody(
-      BuildContext context,
-      PageController pageController,
-      List<Question> questions,
-      ) {
+    BuildContext context,
+    PageController pageController,
+    List<Question> questions,
+  ) {
     if (questions.isEmpty) return QuizError(message: 'No questions found.');
 
     final quizState = useProvider(quizControllerProvider.state);
     return quizState.status == QuizStatus.complete
         ? QuizResults(state: quizState, questions: questions)
         : QuizQuestions(
-      pageController: pageController,
-      state: quizState,
-      questions: questions,
-    );
+            pageController: pageController,
+            state: quizState,
+            questions: questions,
+          );
   }
 }
 
@@ -320,10 +204,19 @@ class QuizResults extends StatelessWidget {
         ),
         const SizedBox(height: 40.0),
         CustomButton(
-          title: 'New Quiz',
+          title: 'Take a New Quiz',
           onTap: () {
             context.refresh(quizRepositoryProvider);
             context.read(quizControllerProvider).reset();
+          },
+        ),
+        CustomButton(
+          title: 'Go To Home',
+          onTap: () {
+            context.refresh(quizRepositoryProvider);
+            context.read(quizControllerProvider).reset();
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => GridLayout()));
           },
         ),
       ],
@@ -384,15 +277,15 @@ class QuizQuestions extends StatelessWidget {
               children: question.answers
                   .map(
                     (e) => AnswerCard(
-                  answer: e,
-                  isSelected: e == state.selectedAnswer,
-                  isCorrect: e == question.correctAnswer,
-                  isDisplayingAnswer: state.answered,
-                  onTap: () => context
-                      .read(quizControllerProvider)
-                      .submitAnswer(question, e),
-                ),
-              )
+                      answer: e,
+                      isSelected: e == state.selectedAnswer,
+                      isCorrect: e == question.correctAnswer,
+                      isDisplayingAnswer: state.answered,
+                      onTap: () => context
+                          .read(quizControllerProvider)
+                          .submitAnswer(question, e),
+                    ),
+                  )
                   .toList(),
             ),
           ],
@@ -438,10 +331,10 @@ class AnswerCard extends StatelessWidget {
           border: Border.all(
             color: isDisplayingAnswer
                 ? isCorrect
-                ? Colors.green
-                : isSelected
-                ? Colors.red
-                : Colors.white
+                    ? Colors.green
+                    : isSelected
+                        ? Colors.red
+                        : Colors.white
                 : Colors.white,
             width: 4.0,
           ),
@@ -466,11 +359,11 @@ class AnswerCard extends StatelessWidget {
               isCorrect
                   ? const CircularIcon(icon: Icons.check, color: Colors.green)
                   : isSelected
-                  ? const CircularIcon(
-                icon: Icons.close,
-                color: Colors.red,
-              )
-                  : const SizedBox.shrink()
+                      ? const CircularIcon(
+                          icon: Icons.close,
+                          color: Colors.red,
+                        )
+                      : const SizedBox.shrink()
           ],
         ),
       ),

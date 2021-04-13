@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/authentication.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
+import 'package:quiztime_app/mainpage.dart';
+import 'authentication.dart';
+import 'package:quiztime_app/screens/categories_page.dart';
 
 class VerifyEmail extends StatefulWidget {
   @override
@@ -29,6 +30,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     });
     super.initState();
   }
+
   @override
   void dispose() {
     timer.cancel();
@@ -39,7 +41,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("A verification email has been sent to ${user.emailVerified}. Please Verify!"),
+        child: Text(
+            "A verification email has been sent to ${user.displayName}. Please Verify!"),
       ),
     );
   }
@@ -54,7 +57,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       // Move to Categories page...
       timer.cancel();
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => CategoriesPage(user)));
+          MaterialPageRoute(builder: (context) => GridLayout()));
     }
   }
 }
