@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
-import 'package:quiztime_app/mainpage.dart';
+import 'package:quiztime_app/categories.dart';
 
 import 'controllers/quiz/quiz_controller.dart';
 import 'controllers/quiz/quiz_state.dart';
@@ -216,7 +216,7 @@ class QuizResults extends StatelessWidget {
             context.refresh(quizRepositoryProvider);
             context.read(quizControllerProvider).reset();
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => GridLayout()));
+                .push(MaterialPageRoute(builder: (context) => Categories()));
           },
         ),
       ],

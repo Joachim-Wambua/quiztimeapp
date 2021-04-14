@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quiztime_app/mainpage.dart';
+import 'package:quiztime_app/categories.dart';
 import 'authentication.dart';
 import 'package:quiztime_app/screens/categories_page.dart';
 
@@ -57,7 +57,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       // Move to Categories page...
       timer.cancel();
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => GridLayout()));
+          MaterialPageRoute(builder: (context) => Categories()));
     }
   }
 }

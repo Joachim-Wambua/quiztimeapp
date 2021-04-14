@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:quiztime_app/mainpage.dart';
+import 'package:quiztime_app/categories.dart';
 import 'package:quiztime_app/screens/loginscreen.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
@@ -300,7 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     signInWithGoogle().then((user) => {
       this.user = user,
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => GridLayout()))
+          MaterialPageRoute(builder: (context) => Categories()))
     });
   }
 }

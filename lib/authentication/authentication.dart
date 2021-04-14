@@ -29,3 +29,17 @@ Future<User> signInWithGoogle() async {
   return firebaseUser;
 
 }
+
+Future logOut() async {
+  // Attempt Log Out
+  try{
+    return await authenticateUser.signOut();
+  }
+  // If Error Return null
+  catch(e){
+    print(e.toString());
+    return null;
+  }
+}
+
+
