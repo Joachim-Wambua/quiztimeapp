@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quiztime_app/categories.dart';
 import 'package:quiztime_app/screens/loginscreen.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/profile_screen.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
 
 // import 'main.dart';
@@ -25,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final Color logoColor = Color(0xff25bcbb);
 
   String userEmail, userPassword, userName;
-  User user; 
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/appbackground.png"),
-            fit: BoxFit.cover,
-          )),
+        image: AssetImage("images/appbackground.png"),
+        fit: BoxFit.cover,
+      )),
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         child: Column(
@@ -99,8 +99,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () {
                   authenticateUser
                       .createUserWithEmailAndPassword(
-                      email: userEmail, password: userPassword)
-                      .then((_) {
+                          email: userEmail, password: userPassword)
+                      .then((user) {
                     Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => VerifyEmail()));
                   });
@@ -151,7 +151,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
-                    child: Text('Sign In Here',
+                    child: Text(
+                      'Sign In Here',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -164,9 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
-                )
-
-            )
+                ))
           ],
         ),
       ),
@@ -198,7 +197,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         //     ),
         // borderRadius: BorderRadius.all(Radius.circular(20))),
         child: TextField(
-          
           key: Key("emailField"),
           // Limiting Input type to only Email Addresses
           keyboardType: TextInputType.emailAddress,
@@ -298,9 +296,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Logic for when user clicks login Button
   void click() {
     signInWithGoogle().then((user) => {
-      this.user = user,
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Categories()))
-    });
+          this.user = user,
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Categories()))
+        });
   }
 }

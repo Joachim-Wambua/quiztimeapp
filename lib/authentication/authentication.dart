@@ -42,4 +42,9 @@ Future logOut() async {
   }
 }
 
+// Get User ID
+Future <String> getCurrentUID() async {
+  return (authenticateUser.currentUser).uid;
+}
+
 

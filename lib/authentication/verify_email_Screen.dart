@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quiztime_app/categories.dart';
 import 'authentication.dart';
-import 'package:quiztime_app/screens/categories_page.dart';
+import 'package:quiztime_app/screens/profile_screen.dart';
 
 class VerifyEmail extends StatefulWidget {
   @override

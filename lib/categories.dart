@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiztime_app/screens/loginscreen.dart';
+import 'package:quiztime_app/screens/profile_screen.dart';
 import 'griddashboard.dart';
 import 'main.dart';
 import 'authentication/authentication.dart';
@@ -31,7 +32,7 @@ class CategoriesState extends State<Categories> {
               height: 50,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 30, right: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -42,6 +43,12 @@ class CategoriesState extends State<Categories> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.of(context).push(MaterialPageRoute(
+                        //         builder: (context) => UserProfile()));
+                        //   },
+                        // ),
                         Image.asset(
                           "images/quiztimelogo.png",
                           width: 50,
@@ -63,22 +70,32 @@ class CategoriesState extends State<Categories> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              " User:John Juma",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8,0,8,0),
+                              child: Text(
+                                " User:John Juma",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             // Text("____"),
-                            Text(
-                              " Rank: Master",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                child: Text('View Profile'),
+                                // style: ButtonStyle(padding: EdgeInsets.all(10)),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => UserProfile()));
+
+                                },
+
+                              ),
+                            )
                           ],
                         ),
                         Text(
@@ -101,7 +118,7 @@ class CategoriesState extends State<Categories> {
                               style: GoogleFonts.openSans(
                                 textStyle: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 15 ,
                                     fontWeight: FontWeight.normal),
                               ),
                             ),

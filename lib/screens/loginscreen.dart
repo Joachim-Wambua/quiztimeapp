@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quiztime_app/categories.dart';
 import 'package:quiztime_app/screens/sign_up.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/categories_page.dart';
+import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/profile_screen.dart';
 import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
 
 // import 'main.dart';
