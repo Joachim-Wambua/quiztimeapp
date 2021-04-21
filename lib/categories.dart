@@ -16,7 +16,17 @@ class Categories extends StatefulWidget {
 }
 
 class CategoriesState extends State<Categories> {
-  final authenticateUser = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  User user;
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+  }
+  initUser() async {
+    user = firebaseAuth.currentUser;
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +72,7 @@ class CategoriesState extends State<Categories> {
                             image: DecorationImage(
                               fit: BoxFit.contain,
                               image: NetworkImage(
-                                  "https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"),
+                                  "${user.photoURL}"),
                             ),
                           ),
                         ),
@@ -73,7 +83,7 @@ class CategoriesState extends State<Categories> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8,0,8,0),
                               child: Text(
-                                " User:John Juma",
+                                " ${user.displayName}",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 17,
@@ -86,12 +96,11 @@ class CategoriesState extends State<Categories> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
-                                child: Text('View Profile'),
+                                child: Text('Edit Profile'),
                                 // style: ButtonStyle(padding: EdgeInsets.all(10)),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => UserProfile()));
-
                                 },
 
                               ),

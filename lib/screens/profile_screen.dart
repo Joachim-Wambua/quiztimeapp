@@ -1,24 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quiztime_app/categories.dart';
 
-bool isObscurePassword = true;
+
 
 class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
 }
+bool isObscurePassword = true;
+// final User user = await firebaseAuth.currentUser();
 
 class _UserProfileState extends State<UserProfile> {
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  User user;
+
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+  }
+  initUser() async {
+    user = firebaseAuth.currentUser;
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff022140),
         title: Text(
-          'Flutter Edit Profile UI',
+          'Edit Profile',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Categories()));
+
+          }
         ),
       ),
       body: Container(
@@ -52,7 +73,7 @@ class _UserProfileState extends State<UserProfile> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('images/profile.jpg'),
+                              image: NetworkImage('${user.photoURL}'),
                             )),
                       ),
                       Positioned(
@@ -76,9 +97,9 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ),
               SizedBox(height: 30),
-              buildTextField("Full Name", "Joachim", false),
-              buildTextField("Email", "joachimmwengi@gmail.com", false),
-              buildTextField("Password", "***********", true),
+              buildTextField("Full Name", "${user.displayName}", false),
+              buildTextField("Email", "${user.email}", false),
+              // buildTextField("Password", "***********", true),
               SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 72.0),
@@ -86,9 +107,6 @@ class _UserProfileState extends State<UserProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     OutlinedButton(
-                      style: ButtonStyle(
-
-                      ),
                       onPressed: () {},
                       child: Text(
                         "CANCEL",
@@ -124,11 +142,13 @@ Widget buildTextField(
     child: TextField(
       obscureText: isPasswordTextField ? isObscurePassword : false,
       decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
+          suffixIcon: isPasswordTextField ?
+          IconButton(
                   icon: Icon(Icons.remove_red_eye),
                   color: Colors.grey,
-                  onPressed: () {})
+                  onPressed: () {
+                  }
+                  )
               : null,
           fillColor: Colors.white,
           filled: true,
