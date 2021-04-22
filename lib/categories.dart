@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:quiztime_app/screens/loginscreen.dart';
 import 'package:quiztime_app/screens/profile_screen.dart';
 import 'griddashboard.dart';
@@ -18,6 +21,16 @@ class Categories extends StatefulWidget {
 class CategoriesState extends State<Categories> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   User user;
+  File profilePhoto;
+  Future getProfilePhoto() async {
+    // ignore: deprecated_member_use
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      profilePhoto = image;
+      print("Image_Path: $profilePhoto");
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -71,8 +84,9 @@ class CategoriesState extends State<Categories> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.contain,
-                              image: NetworkImage(
-                                  "${user.photoURL}"),
+                              image: profilePhoto == null
+                                  ? NetworkImage('${user.photoURL}')
+                                  : FileImage(profilePhoto),
                             ),
                           ),
                         ),

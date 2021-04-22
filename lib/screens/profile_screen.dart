@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quiztime_app/categories.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 
 
@@ -14,6 +19,7 @@ bool isObscurePassword = true;
 class _UserProfileState extends State<UserProfile> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   User user;
+  File profilePhoto;
 
   @override
   void initState() {
@@ -26,6 +32,31 @@ class _UserProfileState extends State<UserProfile> {
   }
   @override
   Widget build(BuildContext context) {
+    // Function to Prompt Image Upload Start(Gallery Opens)
+    Future getProfilePhoto() async {
+      // ignore: deprecated_member_use
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      setState(() {
+        profilePhoto = image;
+        print("Image_Path: $profilePhoto");
+      });
+    }
+
+    // Function to upload Profile Picture to Firebase
+    Future uploadProfilePic(BuildContext context) async {
+      // Getting filename & the firebase storage reference
+      String fileName = basename(profilePhoto.path);
+      Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+      // uploading the files
+      UploadTask uploadTask = firebaseStorageRef.putFile(profilePhoto);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() =>
+        setState(() {
+          // ignore: deprecated_member_use
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture updated Successfully!')));
+        })
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff022140),
@@ -73,7 +104,11 @@ class _UserProfileState extends State<UserProfile> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage('${user.photoURL}'),
+                              //Check if Profile Photo has been used else use default profile photo
+                              image:profilePhoto == null
+                                ? NetworkImage('${user.photoURL}')
+                                  : FileImage(profilePhoto),
+                              // (profilePhoto!=null)?Image.file(profilePhoto,fit: BoxFit.fill,)
                             )),
                       ),
                       Positioned(
@@ -87,10 +122,14 @@ class _UserProfileState extends State<UserProfile> {
                               border: Border.all(width: 4, color: Colors.white),
                               color: Colors.blue,
                             ),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ), onPressed: () {
+                                getProfilePhoto();
+                            },
+                            )
                           ))
                     ],
                   ),
@@ -107,7 +146,9 @@ class _UserProfileState extends State<UserProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       child: Text(
                         "CANCEL",
                         style: TextStyle(
@@ -115,7 +156,9 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          uploadProfilePic(context);
+                        },
                         child: Text(
                           "SAVE",
                           style: TextStyle(
