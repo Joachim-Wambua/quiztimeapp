@@ -1,12 +1,17 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:quiztime_app/categories.dart';
+import 'package:quiztime_app/screens/profile_screen.dart';
 
 import 'controllers/quiz/quiz_controller.dart';
 import 'controllers/quiz/quiz_state.dart';
@@ -24,6 +29,7 @@ final quizQuestionsProvider = FutureProvider.autoDispose<List<Question>>(
 );
 
 class QuizScreen extends HookWidget {
+
   @override
   Widget build(BuildContext context) {
     final quizQuestions = useProvider(quizQuestionsProvider);
@@ -168,7 +174,7 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-class QuizResults extends StatelessWidget {
+class QuizResults extends StatefulWidget {
   final QuizState state;
   final List<Question> questions;
 
@@ -179,13 +185,161 @@ class QuizResults extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _QuizResultsState createState() => _QuizResultsState();
+}
+
+class _QuizResultsState extends State<QuizResults> {
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  User user;
+  File profilePhoto;
+  Future getProfilePhoto() async {
+    // ignore: deprecated_member_use
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      profilePhoto = image;
+      print("Image_Path: $profilePhoto");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+  }
+  initUser() async {
+    user = firebaseAuth.currentUser;
+    setState(() {});
+  }
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        SizedBox(
+          height: 30,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              // InkWell(
+              //   onTap: () {
+              //     Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => UserProfile()));
+              //   },
+              // ),
+              Image.asset(
+                "images/quiztimelogo.png",
+                width: 50,
+                height: 100,
+              ),
+              Container(
+                width: 50,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: profilePhoto == null
+                        ? NetworkImage('${user.photoURL}')
+                        : FileImage(profilePhoto),
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8,0,8,0),
+                    child: Text(
+                      " ${user.displayName}",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  // Text("____"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      child: Text('Edit Profile'),
+                      // style: ButtonStyle(padding: EdgeInsets.all(10)),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UserProfile()));
+                      },
+
+                    ),
+                  )
+                ],
+              ),
+              Text(
+                "|",
+                style: TextStyle(
+                  color: Colors.white,
+                  // fontWeight: FontWeight.bold,
+                  fontSize: 50,
+                ),
+              ),
+              Image.asset(
+                "images/coin.png",
+                width: 40,
+                height: 100,
+              ),
+              Column(
+                children: [
+                  Text(
+                    " Points:",
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15 ,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  Text(
+                    "${widget.state.correct.length * 10}",
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 150,
+        ),
+        const Text(
+          'CONGRATULATIONS!',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const Text(
+          'NEW HIGH SCORE',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
         Text(
-          '${state.correct.length} / ${questions.length}',
+          '${widget.state.correct.length * 10} ',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 60.0,
@@ -193,25 +347,16 @@ class QuizResults extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        const Text(
-          'CORRECT',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 48.0,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 40.0),
+        const SizedBox(height: 70.0),
         CustomButton(
-          title: 'Take a New Quiz',
+          title: 'PLAY AGAIN!',
           onTap: () {
             context.refresh(quizRepositoryProvider);
             context.read(quizControllerProvider).reset();
           },
         ),
         CustomButton(
-          title: 'Go To Home',
+          title: 'CLOSE',
           onTap: () {
             context.refresh(quizRepositoryProvider);
             context.read(quizControllerProvider).reset();
