@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff022140),
-        title: Text("Quiz Time"),
+        title: Text("Quiz Time", style: TextStyle(color: Colors.white),),
       ),
       body: Container(
         decoration: BoxDecoration(

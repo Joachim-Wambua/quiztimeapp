@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quiztime_app/categories.dart';
 import 'package:quiztime_app/screens/sign_up.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/profile_screen.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
+import 'package:quiztime_app/screens/profile_screen.dart';
+import 'package:quiztime_app/authentication/verify_email_Screen.dart';
 
 // import 'main.dart';
 import '../authentication/authentication.dart';
@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         appBar: AppBar(
           // Making the app bar transparent
+          leading: Icon(Icons.arrow_back, color: Colors.white),
           backgroundColor: Color(0xff022140),
           elevation: 0,
         ),

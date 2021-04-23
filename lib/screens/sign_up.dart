@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quiztime_app/categories.dart';
 import 'package:quiztime_app/screens/loginscreen.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/screens/profile_screen.dart';
-import 'file:///C:/Users/ALU%20STUDENT/AndroidStudioProjects/quiztime_app/lib/authentication/verify_email_Screen.dart';
+import 'package:quiztime_app/screens/profile_screen.dart';
+import 'package:quiztime_app/authentication/verify_email_Screen.dart';
 
 // import 'main.dart';
 import '../authentication/authentication.dart';
@@ -25,7 +25,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final Color logoColor = Color(0xff25bcbb);
 
   String userEmail, userPassword, userName;
+
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   User user;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         appBar: AppBar(
           // Making the app bar transparent
           backgroundColor: Color(0xff022140),
+          leading: Icon(Icons.arrow_back, color: Colors.white),
           elevation: 0,
         ),
         body: buildContainer(context));
@@ -97,10 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(45)),
                 onPressed: () {
-                  authenticateUser
-                      .createUserWithEmailAndPassword(
+                  authenticateUser.createUserWithEmailAndPassword(
                           email: userEmail, password: userPassword)
-                      .then((user) {
+                      .then((_) {
                     Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => VerifyEmail()));
                   });
@@ -178,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: <Widget>[
         Image.asset(
           'images/quiztimelogo.png',
-          height: 54,
+          height: 60,
         ),
       ],
     );
@@ -286,6 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           onChanged: (value) {
             setState(() {
               userName = value.trim();
+              userName = user.displayName;
             });
           },
         ),

@@ -90,7 +90,7 @@ class CategoriesState extends State<Categories> {
                             ),
                           ),
                         ),
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -100,7 +100,7 @@ class CategoriesState extends State<Categories> {
                                 " ${user.displayName}",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 21,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -121,41 +121,41 @@ class CategoriesState extends State<Categories> {
                             )
                           ],
                         ),
-                        Text(
-                          "|",
-                          style: TextStyle(
-                            color: Colors.white,
-                            // fontWeight: FontWeight.bold,
-                            fontSize: 50,
-                          ),
-                        ),
-                        Image.asset(
-                          "images/coin.png",
-                          width: 40,
-                          height: 100,
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              " Points:",
-                              style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15 ,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                            Text(
-                              "2700",
-                              style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Text(
+                        //   "|",
+                        //   style: TextStyle(
+                        //     color: Colors.white,
+                        //     // fontWeight: FontWeight.bold,
+                        //     fontSize: 50,
+                        //   ),
+                        // ),
+                        // Image.asset(
+                        //   "images/coin.png",
+                        //   width: 40,
+                        //   height: 100,
+                        // ),
+                        // Column(
+                        //   children: [
+                        //     Text(
+                        //       " Points:",
+                        //       style: GoogleFonts.openSans(
+                        //         textStyle: TextStyle(
+                        //             color: Colors.white,
+                        //             fontSize: 15 ,
+                        //             fontWeight: FontWeight.normal),
+                        //       ),
+                        //     ),
+                        //     Text(
+                        //       "2700",
+                        //       style: GoogleFonts.openSans(
+                        //         textStyle: TextStyle(
+                        //             color: Colors.white,
+                        //             fontSize: 18,
+                        //             fontWeight: FontWeight.bold),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

@@ -65,7 +65,7 @@ class _UserProfileState extends State<UserProfile> {
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => Categories()));
@@ -107,6 +107,7 @@ class _UserProfileState extends State<UserProfile> {
                               //Check if Profile Photo has been used else use default profile photo
                               image:profilePhoto == null
                                 ? NetworkImage('${user.photoURL}')
+                                  // : AssetImage('images/profile.jpg'),
                                   : FileImage(profilePhoto),
                               // (profilePhoto!=null)?Image.file(profilePhoto,fit: BoxFit.fill,)
                             )),
